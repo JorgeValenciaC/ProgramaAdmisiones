@@ -62,7 +62,7 @@ export default function OfertaAcademica({ onIrAlPortal }) {
           <div className="bg-[#152238] p-5 rounded-xl border border-white/5">
             <span className="text-2xl font-bold text-[#e5a93b]">9</span>
             <p className="text-sm text-white font-medium mt-1">Programas de pregrado</p>
-            <span className="text-xs text-gray-400">Presenciales en Chia</span>
+            <span className="text-xs text-gray-400">Presenciales en Medellin</span>
           </div>
           <div className="bg-[#152238] p-5 rounded-xl border border-white/5">
             <span className="text-2xl font-bold text-[#e5a93b]">2026-II</span>
@@ -72,7 +72,7 @@ export default function OfertaAcademica({ onIrAlPortal }) {
           <div className="bg-[#152238] p-5 rounded-xl border border-white/5">
             <span className="text-2xl font-bold text-[#e5a93b]">40+</span>
             <p className="text-sm text-white font-medium mt-1">Años de excelencia</p>
-            <span className="text-xs text-gray-400">Formando líderes desde 1982</span>
+            <span className="text-xs text-gray-400">Formando líderes desde 1981</span>
           </div>
           <div className="bg-[#152238] p-5 rounded-xl border border-white/5">
             <span className="text-2xl font-bold text-[#e5a93b]">95%</span>
