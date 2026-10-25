@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Lock, Check, ChevronLeft, Mail, X } from 'lucide-react';
 
-export default function VerificacionCodigo({ onVolver }) {
-  const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', '']);
+export default function VerificacionCodigo({ onVolver, onAccesoAdmin }) {
+  const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', '', '', '', '']); // Ampliado por si acaso, o adaptado
+  const [codigoTexto, setCodigoTexto] = useState('');
   const [timeLeft, setTimeLeft] = useState(47);
-  const inputRefs = useRef([]);
 
   // Temporizador para el código
   useEffect(() => {
@@ -16,28 +16,24 @@ export default function VerificacionCodigo({ onVolver }) {
     }
   }, [timeLeft]);
 
-  const handleVerificationChange = (value, index) => {
-    if (/^[0-9]?$/.test(value)) {
-      const newCode = [...verificationCode];
-      newCode[index] = value;
-      setVerificationCode(newCode);
-
-      if (value && index < 5) {
-        inputRefs.current[index + 1].focus();
-      }
-    }
-  };
-
-  const handleKeyDown = (e, index) => {
-    if (e.key === 'Backspace' && !verificationCode[index] && index > 0) {
-      inputRefs.current[index - 1].focus();
-    }
-  };
-
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  const handleConfirmar = () => {
+    // Verificamos si el código ingresado (sin espacios y en mayúsculas) es ADMIN2026
+    const codigoLimpio = codigoTexto.trim().toUpperCase();
+
+    if (codigoLimpio === 'ADMIN2026') {
+      if (onAccesoAdmin) {
+        onAccesoAdmin();
+      }
+      return;
+    }
+
+    alert(`Código ingresado: ${codigoLimpio}`);
   };
 
   return (
@@ -46,7 +42,7 @@ export default function VerificacionCodigo({ onVolver }) {
       {/* Contenedor principal de la ventana modal */}
       <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-7 flex flex-col items-center relative transition-all duration-300">
         
-        {/* Botón de cerrar (X) profesional y altamente visible */}
+        {/* Botón de cerrar (X) profesional */}
         <button 
           type="button"
           onClick={onVolver}
@@ -76,32 +72,26 @@ export default function VerificacionCodigo({ onVolver }) {
         </div>
 
         {/* Títulos */}
-        <h2 className="text-xl font-bold text-slate-900 mb-1">Código de verificación</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-1">Código de verificación o Estudiantil</h2>
         <p className="text-slate-500 text-xs text-center max-w-xs mb-5 leading-relaxed">
-          Ingresa el código de 6 dígitos enviado al correo registrado:<br />
-          <span className="font-bold text-slate-900">mc****@gmail.com</span>
+          Ingresa tu código de estudiante o verificación (Ej: <span className="font-bold text-slate-800">ADMIN2026</span> para modo admin):
         </p>
 
-        {/* Inputs para los 6 dígitos */}
-        <div className="flex space-x-2.5 mb-5">
-          {verificationCode.map((digit, index) => (
-            <input
-              key={index}
-              ref={(el) => (inputRefs.current[index] = el)}
-              type="text"
-              maxLength="1"
-              value={digit}
-              onChange={(e) => handleVerificationChange(e.target.value, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              className="w-10 h-14 text-center text-lg font-bold text-slate-800 bg-white border-2 border-slate-200 rounded-xl focus:border-[#16224f] focus:outline-none transition-all shadow-sm"
-            />
-          ))}
+        {/* Campo de texto único que acepta letras y números para escribir ADMIN2026 sin restricciones */}
+        <div className="w-full mb-5">
+          <input
+            type="text"
+            placeholder="Escribe tu código aquí..."
+            value={codigoTexto}
+            onChange={(e) => setCodigoTexto(e.target.value)}
+            className="w-full text-center text-base font-bold text-slate-800 bg-slate-50 border-2 border-slate-200 rounded-xl py-3 px-4 focus:border-[#16224f] focus:outline-none transition-all shadow-sm uppercase tracking-widest"
+          />
         </div>
 
         {/* Botón de confirmar */}
         <button 
           type="button"
-          onClick={() => alert(`Código ingresado: ${verificationCode.join('')}`)}
+          onClick={handleConfirmar}
           className="w-full bg-[#16224f] hover:bg-[#111a3d] text-white font-medium py-3 px-6 rounded-xl transition-colors flex items-center justify-center space-x-2 shadow-md mb-3.5 text-sm cursor-pointer"
         >
           <Check className="w-4 h-4" />
